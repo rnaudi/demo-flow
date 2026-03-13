@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auth Flow — Interactive Demo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <h1 class="header__title">Auth Flow</h1>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-pressed="false">Light / Dark</button>
+  </header>
+
+  <nav class="path-indicator" id="pathIndicator" aria-label="Flow path">
+    <span class="path-indicator__crumb path-indicator__crumb--active">Launch</span>
+  </nav>
+
+  <div class="layout">
+    <div class="layout__flow">
+      <div class="flow" id="flow"></div>
+      <div class="restart-bar" id="restartBar">
+        <button class="btn btn--danger" id="restartBtn">Restart Flow</button>
+      </div>
+    </div>
+
+    <aside class="db-panel" id="dbPanel">
+      <details class="db-panel__legend">
+        <summary>
+          <span class="db-panel__icon">&#9707;</span>
+          DynamoDB
+          <span class="db-panel__legend-toggle-icon">?</span>
+        </summary>
+        <div class="db-panel__legend-content">
+          <div class="db-panel__legend-section">
+            <div class="db-panel__legend-title">Operations</div>
+            <div class="db-panel__legend-item"><span class="db-panel__badge db-panel__badge--create">CREATE</span> New item inserted</div>
+            <div class="db-panel__legend-item"><span class="db-panel__badge db-panel__badge--read">READ</span> Query / lookup</div>
+            <div class="db-panel__legend-item"><span class="db-panel__badge db-panel__badge--update">UPDATE</span> Existing item modified</div>
+          </div>
+          <div class="db-panel__legend-section">
+            <div class="db-panel__legend-title">Entities</div>
+            <div class="db-panel__legend-item"><strong>UserAccount</strong></div>
+            <div>Player account record. PK&nbsp;=&nbsp;user_id, SK&nbsp;=&nbsp;"header"</div>
+            <div class="db-panel__legend-item"><strong>GuestAccount</strong></div>
+            <div>Anonymous account lifecycle. PK&nbsp;=&nbsp;user_id, SK&nbsp;=&nbsp;"guest"</div>
+            <div class="db-panel__legend-item"><strong>LinkedPlatform</strong></div>
+            <div>PC platform link (Steam). SK&nbsp;=&nbsp;platform#header#&lt;PLATFORM&gt;#uid#&lt;id&gt;. UID is globally unique.</div>
+            <div class="db-panel__legend-item"><strong>LinkedConsole</strong></div>
+            <div>Console link (PlayStation, Xbox). SK&nbsp;=&nbsp;console#header#&lt;CONSOLE&gt;#uid#&lt;id&gt;. UID is globally unique.</div>
+            <div class="db-panel__legend-item"><strong>LinkedSocial</strong></div>
+            <div>Network identity (Social). SK&nbsp;=&nbsp;app#&lt;app_key&gt;#social#&lt;provider&gt;#uid#&lt;id&gt;. Used for social login via network (e.g.&nbsp;"google"). Scoped by app&nbsp;&mdash;&nbsp;social UIDs aren't globally unique.</div>
+            <div class="db-panel__legend-item"><strong>LinkedProfile</strong></div>
+            <div>Network identity (OTP). SK&nbsp;=&nbsp;profile#provider#&lt;provider&gt;#id#&lt;id&gt;. Used for email OTP via network "auth-provider".</div>
+          </div>
+          <div class="db-panel__legend-section">
+            <div class="db-panel__legend-title">Key pattern</div>
+            <div>Single-table design. PK is always the user_id (usr_&hellip;). SK encodes the record type and qualifiers.</div>
+          </div>
+        </div>
+      </details>
+      <div class="db-panel__body" id="dbPanelBody">
+        <div class="db-panel__empty">No database operations yet.</div>
+      </div>
+    </aside>
+  </div>
+
+</div>
+
+<template id="tpl-step">
+  <div class="step">
+    <div class="step__header">
+      <span class="step__number"></span>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-actor-badge">
+  <span class="actor-badge"></span>
+</template>
+
+<template id="tpl-step-title">
+  <span class="step__title"></span>
+</template>
+
+<template id="tpl-step-body">
+  <div class="step__body"></div>
+</template>
+
+<template id="tpl-step-endpoint">
+  <div class="step__endpoint"></div>
+</template>
+
+<template id="tpl-step-outcome">
+  <div class="step__outcome"></div>
+</template>
+
+<template id="tpl-final-state">
+  <div class="final-state">
+    <div class="final-state__icon"></div>
+    <div class="final-state__title"></div>
+    <div class="final-state__desc"></div>
+  </div>
+</template>
+
+<template id="tpl-btn">
+  <button class="btn"></button>
+</template>
+
+<template id="tpl-step-actions">
+  <div class="step__actions"></div>
+</template>
+
+<template id="tpl-decision-grid">
+  <div class="decision-grid"></div>
+</template>
+
+<template id="tpl-decision-card">
+  <button class="decision-card" aria-pressed="false">
+    <div class="decision-card__title"></div>
+    <div class="decision-card__desc"></div>
+  </button>
+</template>
+
+<template id="tpl-db-section">
+  <div class="db-panel__section">
+    <div class="db-panel__step-label"></div>
+  </div>
+</template>
+
+<template id="tpl-db-op">
+  <div class="db-panel__op">
+    <span class="db-panel__badge"></span>
+    <span class="db-panel__entity"></span>
+  </div>
+</template>
+
+<template id="tpl-db-fields">
+  <div class="db-panel__fields"></div>
+</template>
+
+<template id="tpl-db-field">
+  <div class="db-panel__field"><span></span></div>
+</template>
+
+<template id="tpl-db-note">
+  <div class="db-panel__note"></div>
+</template>
+
+<script src="app.js"></script>
+</body>
+</html>
